@@ -50,7 +50,7 @@ jobs:
             ${{ runner.os }}-maven
 
       - name: Run Playwright Tests
-        run: mvn verify
+        run: xvfb-run -a mvn verify
 
       - name: Archive trace files
         if: always()
