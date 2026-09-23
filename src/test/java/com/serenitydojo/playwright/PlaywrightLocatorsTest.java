@@ -37,7 +37,7 @@ public class PlaywrightLocatorsTest {
         );
         browserContext = browser.newContext(
                 new Browser.NewContextOptions()
-                        .setLocale("fr-FR")
+                        .setLocale("en-US")
         );
     }
 
@@ -91,14 +91,14 @@ public class PlaywrightLocatorsTest {
         @DisplayName("By attribute")
         @Test
         void locateTheSendButtonByAttribute() {
-            page.locator("input[placeholder='Votre nom de famille *']").fill("Smith");
+            page.locator("input[placeholder='Your last name *']").fill("Smith");
             assertThat(page.locator("#last_name")).hasValue("Smith");
         }
 
         @DisplayName("Drop down")
         @Test
         void locateDropDown() {
-            Locator subjectField = page.getByLabel("Sujet");
+            Locator subjectField = page.getByLabel("Subject");
             subjectField.selectOption(new SelectOption().setIndex(2));
             assertThat(subjectField).hasValue("webmaster");
         }

@@ -18,7 +18,7 @@ public class PlaywrightCucumberFixtures {
     public void setUpBrowserContext() {
         browserContext = browser.newContext(
                 new Browser.NewContextOptions()
-                        .setLocale("fr-FR")
+                        .setLocale("en-US")
         );
         page = browserContext.newPage();
     }

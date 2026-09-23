@@ -24,7 +24,7 @@ public class ProductCatalogStepDefinitions {
     @When("Sally searches for an {string}")
     public  void sally_searches_for(String string) {
         //write code here
-        playwrightTest.shouldSearchByKeyword(page);
+        playwrightTest.shouldSearchByKeyword();
         System.out.println("hello");
         throw new io.cucumber.java.PendingException();
     }

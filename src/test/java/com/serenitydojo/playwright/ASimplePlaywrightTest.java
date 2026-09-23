@@ -13,11 +13,11 @@ import java.util.List;
 
 import static com.serenitydojo.playwright.fixtures.ScreenShotManager.takeScreenshot;
 
-@UsePlaywright(HeadlessChromeOptions.class)
+//@UsePlaywright(HeadlessChromeOptions.class)
 public class ASimplePlaywrightTest {
 
     //We can replace ce code setup et teardown par @UsePlaywright
-   /* private static Playwright playwright;
+    private static Playwright playwright;
     private static Browser browser;
     private static BrowserContext browserContext;
 
@@ -31,7 +31,10 @@ public class ASimplePlaywrightTest {
                         .setHeadless(false)
                         .setArgs(Arrays.asList("--no-sandbox", "--disable-extensions","--disable-gpu"))
         );
-        browserContext = browser.newContext();
+        browserContext = browser.newContext(
+                new Browser.NewContextOptions()
+                        .setLocale("en-US")
+        );
     }
 
     @BeforeEach
@@ -43,10 +46,11 @@ public class ASimplePlaywrightTest {
     public static void teardown() {
         browser.close();
         playwright.close();
-    }*/
+    }
+
     @BeforeEach
-    void setupTrace(BrowserContext context) {
-        context.tracing().start(
+    void setupTrace() {
+        browserContext.tracing().start(
                 new Tracing.StartOptions()
                         .setScreenshots(true)
                         .setSnapshots(true)
@@ -56,8 +60,8 @@ public class ASimplePlaywrightTest {
     }
 
     @AfterEach
-    void recordTrace(BrowserContext context) {
-        context.tracing().stop(
+    void recordTrace() {
+        browserContext.tracing().stop(
                 new Tracing.StopOptions()
                         .setPath(Paths.get("trace.zip"))
         );
@@ -65,7 +69,7 @@ public class ASimplePlaywrightTest {
     // Le parametre Page page doit etre le dernier parametre si on a d'autre data params
 
     @Test
-    void shouldShowThePageTitle(Page page) {
+    void shouldShowThePageTitle() {
 
         page.navigate("https://practicesoftwaretesting.com/");
         String title = page.title();
@@ -74,14 +78,14 @@ public class ASimplePlaywrightTest {
     }
 
     @Test
-    public void shouldSearchByKeyword(Page page) {
+    public void shouldSearchByKeyword() {
         page.navigate("https://practicesoftwaretesting.com/");
 
         //        page.locator("[placeholder=Rechercher]").fill("Pliers");
-        page.getByPlaceholder("Rechercher").fill("Pliers");
+        page.getByPlaceholder("Search").fill("Pliers");
 
         //        page.locator("button:has-text('Rechercher')").click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Rechercher")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Search ")).click();
 
 //        int matchingSearchResults = page.locator(".card").count();
         PlaywrightAssertions.assertThat(page.locator(".card")).hasCount(4);
@@ -98,10 +102,9 @@ public class ASimplePlaywrightTest {
     }
 
     @Test
-    void selectMenuItem(Page page) {
+    void selectMenuItem() {
         page.navigate("https://practicesoftwaretesting.com/");
         page.getByRole(AriaRole.MENUBAR)
-                .getByRole(AriaRole.MENUITEM, new Locator.GetByRoleOptions().setName("Accueil")).click();
+                .getByRole(AriaRole.MENUITEM, new Locator.GetByRoleOptions().setName("Home")).click();
     }
-
 }

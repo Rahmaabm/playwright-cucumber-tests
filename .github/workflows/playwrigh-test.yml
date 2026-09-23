@@ -16,9 +16,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      APP_LOCALE: fr
-
     steps:
       - name: Check locale
         run: echo "APP_LOCALE=$APP_LOCALE"
