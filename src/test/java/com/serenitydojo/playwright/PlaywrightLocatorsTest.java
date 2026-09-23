@@ -35,7 +35,10 @@ public class PlaywrightLocatorsTest {
                         .setHeadless(false)
                         .setArgs(Arrays.asList("--no-sandbox", "--disable-extensions","--disable-gpu"))
         );
-        browserContext = browser.newContext();
+        browserContext = browser.newContext(
+                new Browser.NewContextOptions()
+                        .setLocale("fr-FR")
+        );
     }
 
     @BeforeEach
