@@ -43,7 +43,7 @@ jobs:
 
       - name: Lancer le test JMeter
         run: |
-          jmeter -n -t jmeter/LoadTest.jmx \
+          jmeter -n -t src/test/jmeter/LoadTest.jmx \
                  -l results.jtl \
                  -e -o report
 
