@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="LoadTest - Test de Charge Progressive" enabled="true">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="TARGET_THREADS_PHASE1" elementType="Argument">
+            <stringProp name="Argument.name">TARGET_THREADS_PHASE1</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TARGET_THREADS_PHASE2" elementType="Argument">
+            <stringProp name="Argument.name">TARGET_THREADS_PHASE2</stringProp>
+            <stringProp name="Argument.value">50</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TARGET_THREADS_PHASE3" elementType="Argument">
+            <stringProp name="Argument.name">TARGET_THREADS_PHASE3</stringProp>
+            <stringProp name="Argument.value">100</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.comment" elementType="Comment" guiclass="CommentPanel" testclass="Comment" testname="Comment" enabled="true">
+        <stringProp name="Comment.text">
+Test de charge progressive en 3 phases:
+Phase 1: 10 utilisateurs pendant 60 secondes
+Phase 2: 50 utilisateurs pendant 120 secondes
+Phase 3: 100 utilisateurs pendant 180 secondes
+        </stringProp>
+      </elementProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Phase 1 - 10 Utilisateurs" enabled="true">
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">3</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${TARGET_THREADS_PHASE1}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">60</stringProp>
+        <stringProp name="ThreadGroup.delay">0</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Page Accueil" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+            <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+              <stringProp name="200">200</stringProp>
+            </elementProp>
+            <stringProp name="Assertion.test_type">1</stringProp>
+            <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Produit 1" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/product/1</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+            <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+              <stringProp name="200">200</stringProp>
+            </elementProp>
+            <stringProp name="Assertion.test_type">1</stringProp>
+            <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Contact" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/contact</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+            <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+              <stringProp name="200">200</stringProp>
+            </elementProp>
+            <stringProp name="Assertion.test_type">1</stringProp>
+            <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Délai Aléatoire" enabled="true">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
+          <stringProp name="GaussianRandomTimer.range">1000.0</stringProp>
+        </GaussianRandomTimer>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Résultats Phase 1" enabled="true">
+        <elementProp name="collectorProperties" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+          <stringProp name="filename">${project.build.directory}/jmeter/results/LoadTest-Phase1.jtl</stringProp>
+        </elementProp>
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+    <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Phase 2 - 50 Utilisateurs" enabled="true">
+      <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+        <boolProp name="LoopController.continue_forever">false</boolProp>
+        <stringProp name="LoopController.loops">3</stringProp>
+      </elementProp>
+      <stringProp name="ThreadGroup.num_threads">${TARGET_THREADS_PHASE2}</stringProp>
+      <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+      <boolProp name="ThreadGroup.scheduler">true</boolProp>
+      <stringProp name="ThreadGroup.duration">120</stringProp>
+      <stringProp name="ThreadGroup.delay">0</stringProp>
+      <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+    </ThreadGroup>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Page Accueil" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
+        <stringProp name="HTTPSampler.path">/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+          <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+            <stringProp name="200">200</stringProp>
+          </elementProp>
+          <stringProp name="Assertion.test_type">1</stringProp>
+          <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Catégorie Hand Tools" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
+        <stringProp name="HTTPSampler.path">/category/hand-tools</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+          <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+            <stringProp name="200">200</stringProp>
+          </elementProp>
+          <stringProp name="Assertion.test_type">1</stringProp>
+          <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Délai Aléatoire" enabled="true">
+        <stringProp name="ConstantTimer.delay">1000</stringProp>
+        <stringProp name="GaussianRandomTimer.range">1000.0</stringProp>
+      </GaussianRandomTimer>
+      <hashTree/>
+    </hashTree>
+    <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Phase 3 - 100 Utilisateurs" enabled="true">
+      <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+        <boolProp name="LoopController.continue_forever">false</boolProp>
+        <stringProp name="LoopController.loops">2</stringProp>
+      </elementProp>
+      <stringProp name="ThreadGroup.num_threads">${TARGET_THREADS_PHASE3}</stringProp>
+      <stringProp name="ThreadGroup.ramp_time">90</stringProp>
+      <boolProp name="ThreadGroup.scheduler">true</boolProp>
+      <stringProp name="ThreadGroup.duration">180</stringProp>
+      <stringProp name="ThreadGroup.delay">0</stringProp>
+      <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+    </ThreadGroup>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Page Accueil" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">practicesoftwaretesting.com</stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
+        <stringProp name="HTTPSampler.path">/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <stringProp name="HTTPSampler.connect_timeout">30000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Status 200" enabled="true">
+          <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+            <stringProp name="200">200</stringProp>
+          </elementProp>
+          <stringProp name="Assertion.test_type">1</stringProp>
+          <intProp name="Assertion.test_field">Assertion.response_code</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Délai Aléatoire" enabled="true">
+        <stringProp name="ConstantTimer.delay">1000</stringProp>
+        <stringProp name="GaussianRandomTimer.range">1000.0</stringProp>
+      </GaussianRandomTimer>
+      <hashTree/>
+    </hashTree>
+    <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Résultats Globaux" enabled="true">
+      <elementProp name="collectorProperties" elementType="CollectionProperty" guiclass="CollectionPanel" testclass="CollectionProperty" testname="Collection" enabled="true">
+        <stringProp name="filename">${project.build.directory}/jmeter/results/LoadTest-results.jtl</stringProp>
+      </elementProp>
+      <boolProp name="ResultCollector.error_logging">false</boolProp>
+    </ResultCollector>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
+
