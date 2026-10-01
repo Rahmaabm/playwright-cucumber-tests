@@ -9,9 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>26</maven.compiler.source>
-        <maven.compiler.target>26</maven.compiler.target>
-        <maven.compiler.release>26</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <allure.version>2.29.0</allure.version>
         <aspectj.version>1.9.21</aspectj.version>
@@ -155,6 +155,39 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- JMeter Maven Plugin for Performance Testing -->
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>3.7.0</version>
+                <executions>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Location of JMeter test files -->
+                    <testFilesDirectory>${basedir}/src/test/jmeter</testFilesDirectory>
+                    <!-- Results output directory -->
+                    <resultsDirectory>${project.build.directory}/jmeter/results</resultsDirectory>
+                    <!-- JMeter logs directory -->
+                    <logsDirectory>${project.build.directory}/jmeter/logs</logsDirectory>
+                    <!-- Enable detailed logging -->
+                    <jMeterProcessJVMSettings>
+                        <arguments>
+                            <argument>-Xmn512m</argument>
+                            <argument>-Xms1024m</argument>
+                            <argument>-Xmx1024m</argument>
+                            <argument>-XX:+UseG1GC</argument>
+                        </arguments>
+                    </jMeterProcessJVMSettings>
+                </configuration>
             </plugin>
         </plugins>
     </build>

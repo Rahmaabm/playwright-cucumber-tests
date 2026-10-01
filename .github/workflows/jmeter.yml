@@ -1,0 +1,67 @@
+name: Performance tests (JMeter)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:   # permet de le lancer à la main
+
+env:
+  JMETER_VERSION: 5.6.3
+
+jobs:
+  jmeter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Installer JMeter
+        run: |
+          wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
+          tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
+          echo "$PWD/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
+
+      - name: Démarrer l'application
+        run: |
+          mvn -B -q package -DskipTests
+          nohup java -jar target/*.jar > app.log 2>&1 &
+          # attendre que l'application réponde (max 60 s)
+          for i in $(seq 1 30); do
+            curl -s https://practicesoftwaretesting.com/ > /dev/null && exit 0
+            sleep 2
+          done
+          echo "L'application n'a pas démarré"; cat app.log; exit 1
+
+      - name: Lancer le test JMeter
+        run: |
+          jmeter -n -t jmeter/LoadTest.jmx \
+                 -l results.jtl \
+                 -e -o report
+
+      - name: Vérifier le taux d'erreurs
+        run: |
+          TOTAL=$(awk -F, 'NR>1' results.jtl | wc -l)
+          ERRORS=$(awk -F, 'NR>1 && $8=="false"' results.jtl | wc -l)
+          echo "Requêtes : $TOTAL, erreurs : $ERRORS"
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "Le test de charge a produit des erreurs"; exit 1
+          fi
+
+      - name: Publier le rapport
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-report
+          path: |
+            report/
+            results.jtl
+            app.log
