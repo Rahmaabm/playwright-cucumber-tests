@@ -163,6 +163,14 @@
                 <artifactId>jmeter-maven-plugin</artifactId>
                 <version>3.7.0</version>
                 <executions>
+                    <!-- 1. Prépare JMeter et génère target/config.json -->
+                    <execution>
+                        <id>configuration</id>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                    <!-- 2. Lance les tests -->
                     <execution>
                         <id>jmeter-tests</id>
                         <phase>verify</phase>
@@ -172,21 +180,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- Location of JMeter test files -->
-                    <testFilesDirectory>${basedir}/src/test/jmeter</testFilesDirectory>
-                    <!-- Results output directory -->
+                    <testFilesDirectory>${project.basedir}/src/test/jmeter</testFilesDirectory>
                     <resultsDirectory>${project.build.directory}/jmeter/results</resultsDirectory>
-                    <!-- JMeter logs directory -->
-                    <logsDirectory>${project.build.directory}/jmeter/logs</logsDirectory>
-                    <!-- Enable detailed logging -->
-                    <jMeterProcessJVMSettings>
-                        <arguments>
-                            <argument>-Xmn512m</argument>
-                            <argument>-Xms1024m</argument>
-                            <argument>-Xmx1024m</argument>
-                            <argument>-XX:+UseG1GC</argument>
-                        </arguments>
-                    </jMeterProcessJVMSettings>
                 </configuration>
             </plugin>
         </plugins>
