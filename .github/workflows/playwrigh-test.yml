@@ -82,7 +82,10 @@ jobs:
       - name: Import JUnit results into Xray
         if: always()
         run: |
-          FILES=$(find target/surefire-reports target/failsafe-reports -name 'TEST-*.xml' 2>/dev/null)
+          echo "Rapports présents :"
+          find target -name 'TEST-*.xml' || true
+
+          FILES=$(find target/surefire-reports target/failsafe-reports -name 'TEST-*.xml' 2>/dev/null || true)
           if [ -z "$FILES" ]; then
             echo "Aucun rapport JUnit trouvé"
             exit 1
@@ -93,5 +96,5 @@ jobs:
               -H "Authorization: Bearer ${{ steps.xray-auth.outputs.token }}" \
               -H "Content-Type: text/xml" \
               --data-binary @"$f" \
-              "https://xray.cloud.getxray.app/api/v2/import/execution/junit?projectKey=KAN-30"
+              "https://xray.cloud.getxray.app/api/v2/import/execution/junit?projectKey=KAN"
           done
