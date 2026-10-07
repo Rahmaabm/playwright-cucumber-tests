@@ -82,19 +82,27 @@ jobs:
       - name: Import JUnit results into Xray
         if: always()
         run: |
-          echo "Rapports présents :"
-          find target -name 'TEST-*.xml' || true
+          # Fusion de tous les rapports en un seul fichier
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > merged.xml
+          echo '<testsuites>' >> merged.xml
+          find target/surefire-reports target/failsafe-reports -name 'TEST-*.xml' 2>/dev/null | while IFS= read -r f; do
+            echo "Fusion de $f"
+            grep -v '^<?xml' "$f" >> merged.xml
+          done || true
+          echo '</testsuites>' >> merged.xml
 
-          FILES=$(find target/surefire-reports target/failsafe-reports -name 'TEST-*.xml' 2>/dev/null || true)
-          if [ -z "$FILES" ]; then
-            echo "Aucun rapport JUnit trouvé"
+          # Import avec affichage de la réponse de Xray
+          HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ steps.xray-auth.outputs.token }}" \
+            -H "Content-Type: text/xml" \
+            --data-binary @merged.xml \
+            "https://xray.cloud.getxray.app/api/v2/import/execution/junit?projectKey=KAN")
+
+          echo "Code HTTP : $HTTP_CODE"
+          echo "Réponse Xray :"
+          cat response.txt
+          echo ""
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
             exit 1
           fi
-          for f in $FILES; do
-            echo "Import de $f"
-            curl -f -X POST \
-              -H "Authorization: Bearer ${{ steps.xray-auth.outputs.token }}" \
-              -H "Content-Type: text/xml" \
-              --data-binary @"$f" \
-              "https://xray.cloud.getxray.app/api/v2/import/execution/junit?projectKey=KAN"
-          done
